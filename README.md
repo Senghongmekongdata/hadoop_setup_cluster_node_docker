@@ -1,6 +1,6 @@
 # 5-Node Distributed Hadoop & Spark Cluster (Docker)
 
-This project provides a fully functional, distributed Big Data environment using Docker. It includes a 5-node Hadoop cluster (1 Master, 4 Workers) integrated with Apache Spark, Hive, and Jupyter Notebook for interactive data analysis.
+Setting up a 5-node Hadoop cluster in Docker is an excellent way to simulate a distributed environment on a single machine.
 
 ## 🏗️ Architecture Overview
 - **NameNode (Master):** Manages HDFS metadata (Port: 9870)
