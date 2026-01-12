@@ -5,12 +5,7 @@ This project provides a fully functional, distributed Big Data environment using
 ## 🏗️ Architecture Overview
 - **NameNode (Master):** Manages HDFS metadata (Port: 9870)
 - **ResourceManager (Master):** Schedules YARN jobs (Port: 8088)
-- **4x DataNodes (Workers):** Store distributed data blocks.
-- **4x NodeManagers (Workers):** Execute computing tasks.
-- **Spark (Master + Workers):** Distributed in-memory processing.
-- **Hive:** SQL-based data warehousing on HDFS.
-- **Jupyter:** Web-based IDE for PySpark.
-
+- **3x DataNodes (Workers):** Store distributed data blocks.
 ---
 
 ## Prerequisites
@@ -19,7 +14,9 @@ This project provides a fully functional, distributed Big Data environment using
 Before diving into Docker, ensure your host machine meets these minimum specs to handle 5 JVM-heavy containers:
 - **RAM:** 16GB recommended (8GB minimum, but it will be sluggish).
 - **Storage:** 10GB free space.
-- **Docker Desktop:** Installed and running (Windows, macOS, or Linux). [Download Docker Here!](https://drive.google.com/file/d/1ona6Jr7Fs5BdzujMF--ojkqZazoGv7Dw/view?usp=drive_link)
+- **Docker Desktop:** Installed and running (Windows, macOS, or Linux).
+  - [Download Docker Here!](https://drive.google.com/file/d/1ona6Jr7Fs5BdzujMF--ojkqZazoGv7Dw/view?usp=drive_link)
+  - Or **Download with website:** [Docker](https://www.docker.com/products/docker-desktop/)
 - **Docker Compose:** Usually bundled with Docker Desktop.
 
 ### 2. Check Pre-requirements
