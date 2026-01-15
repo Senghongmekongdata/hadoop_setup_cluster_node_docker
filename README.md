@@ -5,7 +5,7 @@ Setting up a 5-node Hadoop cluster in Docker is an excellent way to simulate a d
 ## 🏗️ Architecture Overview
 - **NameNode (Master):** Manages HDFS metadata (Port: 9870)
 - **ResourceManager (Master):** Schedules YARN jobs (Port: 8088)
-- **3x DataNodes (Workers):** Store distributed data blocks.
+- **4x DataNodes (Workers):** Store distributed data blocks.
 ---
 
 ## Prerequisites
@@ -35,6 +35,7 @@ wsl --install
 ```
 3. Restart your computer when prompted.
 
+
 #### 3. Initialize Your Linux Distro
 After the restart, a Linux terminal window (Ubuntu) will open automatically to finish the installation.
 - **Create a Username:** This can be anything (it doesn't have to match your Windows name).
@@ -51,6 +52,16 @@ To ensure everything is running on the latest version (WSL 2), open PowerShell a
 #PowerShell
 wsl -l -v
 ```
+
+## Project Directory Structure 
+Create a folder named hadoop-spark-cluster and set up the following file structure inside it:
+```
+hadoop-spark-cluster/
+├── Dockerfile -- Defines the "recipe" for building the single Docker image that every node in your cluster will use.
+├── docker-compose.yml -- Describes the "infrastructure" of your cluster. It tells Docker how to spin up multiple instances of your image and how to network them.
+└── entrypoint.sh -- A startup script that runs inside the container the moment it boots up. It decides "Who am I?" and starts the correct software.
+```
+
 
 ## 🚀 Set up Docker
 We will use a docker-compose.yml file to orchestrate the services. This setup uses pre-configured images from the Big Data Europe repository, which are stable and widely used for learning.
