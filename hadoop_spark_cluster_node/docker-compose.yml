@@ -8,9 +8,9 @@ services:
     environment:
       - ROLE=master
     ports:
-      - "9870:9870" # HDFS Browser
-      - "8080:8080" # Spark Master Browser
-      - "8088:8088" # YARN Browser
+      - "9870:9870" # HDFS UI
+      - "8080:8080" # Spark Master UI
+      - "8088:8088" # YARN UI
       - "9000:9000" # HDFS RPC
       - "7077:7077" # Spark RPC
     volumes:
