@@ -112,9 +112,10 @@ RUN curl -O https://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SP
     rm spark-$SPARK_VERSION-bin-hadoop3.tgz
 
 # 5. Configure Hadoop Config Files (XML Injection)
+# We hardcode /opt/hadoop in the XML values to ensure YARN containers find the path.
 RUN echo '<configuration><property><name>fs.defaultFS</name><value>hdfs://namenode:9000</value></property></configuration>' > $HADOOP_HOME/etc/hadoop/core-site.xml && \
     echo '<configuration><property><name>dfs.replication</name><value>2</value></property><property><name>dfs.namenode.datanode.registration.ip-hostname-check</name><value>false</value></property></configuration>' > $HADOOP_HOME/etc/hadoop/hdfs-site.xml && \
-    echo '<configuration><property><name>mapreduce.framework.name</name><value>yarn</value></property><property><name>mapreduce.application.classpath</name><value>$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*</value></property></configuration>' > $HADOOP_HOME/etc/hadoop/mapred-site.xml && \
+    echo '<configuration><property><name>mapreduce.framework.name</name><value>yarn</value></property><property><name>mapreduce.application.classpath</name><value>/opt/hadoop/share/hadoop/mapreduce/*:/opt/hadoop/share/hadoop/mapreduce/lib/*</value></property><property><name>yarn.app.mapreduce.am.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property><property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property><property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property></configuration>' > $HADOOP_HOME/etc/hadoop/mapred-site.xml && \
     echo '<configuration><property><name>yarn.resourcemanager.hostname</name><value>namenode</value></property><property><name>yarn.nodemanager.aux-services</name><value>mapreduce_shuffle</value></property><property><name>yarn.nodemanager.env-whitelist</name><value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value></property></configuration>' > $HADOOP_HOME/etc/hadoop/yarn-site.xml
 
 # 6. Configure Spark
@@ -123,7 +124,6 @@ ENV PYSPARK_DRIVER_PYTHON=python3
 
 # 7. Add Entrypoint Script
 COPY entrypoint.sh /entrypoint.sh
-# Fix Windows Line Endings (\r) just in case
 RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 WORKDIR /root
@@ -131,6 +131,46 @@ ENTRYPOINT ["/entrypoint.sh"]
 ```
 ***(Save: Ctrl+O, Enter, Ctrl+X)***
 
+### Step 3: Create the entrypoint.sh
+This script handles the startup sequence for Master and Workers.
+
+Run: nano entrypoint.sh Paste this content:
+```
+#bash
+#!/bin/bash
+
+# --- MASTER NODE ---
+if [ "$ROLE" == "master" ]; then
+    # Format only if the 'current' folder is missing (prevents data loss on restart)
+    if [ ! -d "/tmp/hadoop-root/dfs/name/current" ]; then
+        echo "Formatting NameNode..."
+        $HADOOP_HOME/bin/hdfs namenode -format
+    fi
+    
+    echo "Starting NameNode..."
+    $HADOOP_HOME/bin/hdfs --daemon start namenode
+    
+    echo "Starting YARN ResourceManager..."
+    $HADOOP_HOME/bin/yarn --daemon start resourcemanager
+
+    echo "Starting Spark Master..."
+    $SPARK_HOME/sbin/start-master.sh
+fi
+
+# --- WORKER NODES ---
+if [ "$ROLE" == "worker" ]; then
+    echo "Starting DataNode..."
+    $HADOOP_HOME/bin/hdfs --daemon start datanode
+
+    echo "Starting YARN NodeManager..."
+    $HADOOP_HOME/bin/yarn --daemon start nodemanager
+    
+    echo "Starting Spark Worker..."
+    $SPARK_HOME/sbin/start-worker.sh spark://namenode:7077
+fi
+
+tail -f /dev/null
+```
 
 ### Step 4: Create the docker-compose.yml
 This defines the network, the 5 nodes, and maps the storage volumes.
