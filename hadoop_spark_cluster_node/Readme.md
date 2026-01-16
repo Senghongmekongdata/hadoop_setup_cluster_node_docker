@@ -267,6 +267,12 @@ docker compose up -d --build --force-recreate
    - HDFS: http://localhost:9870 (Go to "Datanodes" tab $\rightarrow$ Should see 4).
    - YARN: http://localhost:8088 (Look at "Active Nodes" $\rightarrow$ Should see 4).
    - Spark: http://localhost:8080 (Look at "Workers" $\rightarrow$ Should see 4).
+
+### Run the Pi Test
+```
+#bash
+docker exec -it hadoop-master yarn jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar pi 2 100
+```
   
 #### HDFS - Verification UI
 <img width="1255" height="536" alt="image" src="https://github.com/user-attachments/assets/aa12da37-b89d-4745-aadd-89d2d8d9dd86" />
