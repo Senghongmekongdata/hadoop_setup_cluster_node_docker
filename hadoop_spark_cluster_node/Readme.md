@@ -268,3 +268,14 @@ docker compose up -d --build --force-recreate
    - YARN: http://localhost:8088 (Look at "Active Nodes" $\rightarrow$ Should see 4).
    - Spark: http://localhost:8080 (Look at "Workers" $\rightarrow$ Should see 4).
   
+#### HDFS - Verification UI
+<img width="1255" height="536" alt="image" src="https://github.com/user-attachments/assets/aa12da37-b89d-4745-aadd-89d2d8d9dd86" />
+
+
+#### YARN - Verification UI
+<img width="1267" height="209" alt="image" src="https://github.com/user-attachments/assets/835eda6c-b30a-4938-9846-785bbd29208a" />
+
+
+#### Spark - Verification UI
+<img width="1269" height="434" alt="image" src="https://github.com/user-attachments/assets/b7dc078c-0794-4bbc-b56d-685676085500" />
+
